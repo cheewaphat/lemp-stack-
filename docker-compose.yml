@@ -1,0 +1,55 @@
+version: "3.7"
+
+services:
+
+  php:
+    image: php:7.2-fpm
+    container_name: php
+    restart: always
+    volumes:
+      - ./php/php.ini:/usr/local/etc/php/php.ini
+      - ./www:/var/www/
+
+  web:
+    image: nginx:1.17
+    container_name: web
+    restart: always
+    ports:
+      - 8080:80
+    volumes:
+      - ./nginx/conf.d/:/etc/nginx/conf.d/:ro
+    volumes_from:
+        - php
+    depends_on:
+      - php
+  
+  mariadb:
+    image: mariadb:10.4
+    container_name: mariadb
+    restart: always
+    # command: "mysqld --init-file /data/application/init.sql"
+    volumes:
+      - ./mysql/data/:/var/lib/mysql/
+      # - ./mysql/conf/init.sql:/data/application/init.sql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root4
+      - MYSQL_DATABASE=app_db
+      - MYSQL_USER=app
+      - MYSQL_PASSWORD=123456
+    ports: 
+      - 3306:3306
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: phpmyadmin
+    restart: always
+    ports : 
+      - 8889:80
+    environment:
+      - MYSQL_ROOT_PASSWORD=root4
+      - PMA_ARBITRARY=1
+      - PMA_HOST=mariadb
+    depends_on:
+      - mariadb
+
+  

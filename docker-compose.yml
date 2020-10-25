@@ -3,11 +3,13 @@ version: "3.7"
 services:
 
   php:
-    image: php:7.2-fpm
+    # image: php:7.2-fpm
+    build: ./php/
     container_name: php
     restart: always
     volumes:
-      - ./php/php.ini:/usr/local/etc/php/php.ini
+      - ./php/conf/:/usr/local/etc/php/
+      - ./log/php/:/tmp/log/
       - ./www:/var/www/
 
   web:
@@ -18,6 +20,7 @@ services:
       - 8080:80
     volumes:
       - ./nginx/conf.d/:/etc/nginx/conf.d/:ro
+      # - ./log/nginx/:/var/log/nginx/
     volumes_from:
         - php
     depends_on:

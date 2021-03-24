@@ -25,15 +25,16 @@ RUN set -ex; \
 	; \
 	\
 	docker-php-ext-configure gd --with-freetype-dir=/usr --with-jpeg-dir=/usr --with-png-dir=/usr; \
-	docker-php-ext-install -j "$(nproc)" \
-		bcmath \
-		exif \
-		gd \
-		mysqli \
-		zip \
-	; \
+	docker-php-ext-install bcmath;\
+	docker-php-ext-install exif;\
+	docker-php-ext-install zip;\
+	docker-php-ext-install mysqli;\
+	docker-php-ext-install pdo_mysql;\
+	docker-php-ext-install gd;\
 	pecl install imagick-3.4.4; \
 	docker-php-ext-enable imagick; \
+	docker-php-ext-enable mysqli; \
+	docker-php-ext-enable pdo_mysql; \
 	\
 # reset apt-mark's "manual" list so that "purge --auto-remove" will remove all build dependencies
 	apt-mark auto '.*' > /dev/null; \

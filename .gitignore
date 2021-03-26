@@ -7,6 +7,8 @@
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+!www/conn.php
+!www/index.php
 *.code-workspace
 
 ### VisualStudioCode Patch ###
